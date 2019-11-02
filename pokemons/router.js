@@ -1,16 +1,60 @@
 const express = require("express")
 const router = express.Router()
+const MongoClient = require('mongodb').MongoClient
 
-// Mongo = Document Based Databse
-// Collection = Table (in RDBMS)
-// Document = row (in RDBMS)
-// Key = Column (in RDBMS)
-// _id: ObjectID = DocumentID
+const mongoURL = 'mongodb+srv://it59160501:lidz123456@pokemon-cluster-wzc8t.gcp.mongodb.net/test?retryWrites=true&w=majority'
+const option = { useNewUrlParser : true, useUnifiedTopology : true}
+const DB_Name = 'pokemondb'
+const DB_Collection = 'pokemons'
+
+
+async function connectDatabase(){
+    let client = MongoClient.connect(mongoURL, option).catch(err => {
+        console.log("Error orccurred when try to connect Mongo")
+        console.log(err)
+        res.status(500).send({error:err})
+        return
+    })
+    return client
+}
+
+router.post('/pokemons', async (req,res) => {
+    let pokemon = req.body
+
+    let client = await connectDatabase()
+
+    try{
+        let database = client.db(DB_Name)
+        let result = await database.collection(DB_Collection).insertOne(pokemon)
+        res.status(201).json({id: result})
+    }catch(err){
+        console.log(err)
+        res.status(500).send({error:err})
+    }finally{
+        client.close()
+    }
+
+})
 
 // http://localhost:3000/pokemons?name=rich
-router.get('/pokemons', (req,res) => {
+router.get('/pokemons', async (req,res) => {
     let name = req.query.name
-    res.json({ pokemon_name : name })
+
+    let client = await connectDatabase()
+
+    try{
+        let database = client.db(DB_Name)
+        let result = await database.collection(DB_Collection).find({}).toArray()
+        res.json(result)
+    }catch(err){
+        console.log(err)
+        res.status(500).send({error:err})
+    }finally{
+        client.close()
+    }
+
+  
+
 })
 
 // http://localhost:3000/pokemon/1
