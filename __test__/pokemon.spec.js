@@ -30,3 +30,21 @@ describe('/post pokemon' , () =>{
         })
     })
 })
+
+describe('/me ' , () =>{
+    it('should return(401) unauthorize when token is Unavailable' , (done)=>{
+        request(app).get('/me')
+        .end((err,res) => {
+            expect(res.statusCode).to.equals(401)
+            done() 
+        })
+    })
+    it('should return(401) unauthorize when token is invalid' , (done)=>{
+        request(app).get('/me')
+        .set('Authorization' , '123456789')
+        .end((err,res) => {
+            expect(res.statusCode).to.equals(401)
+            done() 
+        })
+    })
+})
