@@ -2,9 +2,9 @@ const express = require("express")
 const router = express.Router()
 const MongoClient = require('mongodb').MongoClient
 
-const mongoURL = 'mongodb+srv://it59160501:lidz123456@pokemon-cluster-wzc8t.gcp.mongodb.net/test?retryWrites=true&w=majority'
+const mongoURL = 'mongodb+srv://59160273:Chariot97@pokemon-cluster-otxxa.gcp.mongodb.net/test?retryWrites=true&w=majority'
 const option = { useNewUrlParser : true, useUnifiedTopology : true}
-const DB_Name = 'pokemondb'
+const DB_Name = 'Pokemondb'
 const DB_Collection = 'pokemons'
 
 
