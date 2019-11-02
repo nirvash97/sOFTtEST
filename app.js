@@ -1,24 +1,11 @@
 const express = require("express")
+const pokemonsRouter = require('./pokemons/router')
 const app = express()
-const port = 3000
 
+// register middleware
 app.use(express.json())
+app.use(pokemonsRouter)
 
-// http://localhost:3000/pokemons?name=rich
-app.get('/pokemons', (req,res) => {
-    let name = req.query.name
-    res.json({ pokemon_name : name })
-})
+app.get("/", (req, res) => res.send({message:'Hello World'}))
 
-// http://localhost:3000/pokemon/1
-app.get('/pokemon/:id', (req,res) => {
-    let id = req.params.id
-    res.json({ pokemon_id : id })
-})
-
-app.post('/pokemons',(req,res) => {
-    let p = req.body
-    return res.send(p)
-})
-
-app.listen(port, () => console.log(`Pokemon!! API listening on port ${port}!`)) // start server
+module.exports = app
